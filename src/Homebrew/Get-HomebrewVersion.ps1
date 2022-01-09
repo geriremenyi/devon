@@ -7,15 +7,9 @@ function Get-HomebrewVersion
     $Package
   )
   
-  $Command = $null
-  $Flag = 'v'
-  if ($Package)
-  {
-    $Command = "list"
-    $Flag = $null
-  }
+  $Arguments = $Package ? "list $Package" : "-v"
 
-  $VersionRaw = Invoke-HomebrewCommand -Command $Command -Package $Package -Flag $Flag -PipeThrough | Join-String
+  $VersionRaw = Invoke-TerminalCommand -Command "brew" -Arguments $Arguments -OutputPassThru | Join-String
   $Version = $VersionRaw | Select-String ".*(\d\.\d\.\d).*"
 
   if ($Version.Matches.Success)

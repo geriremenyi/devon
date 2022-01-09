@@ -2,7 +2,7 @@ function Write-LogError
 {
   [CmdletBinding()]
   param(
-    [Parameter(Mandatory = $true, HelpMessage = 'The message to log')]
+    [Parameter(Mandatory = $true, ValueFromPipeline = $true, HelpMessage = 'The message to log')]
     [string] 
     $Message
   )
