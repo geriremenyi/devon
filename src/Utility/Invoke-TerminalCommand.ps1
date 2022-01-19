@@ -18,7 +18,18 @@ function Invoke-TerminalCommand
       [switch]
       $OutputPassThru
   )
-  
+
+
+  # On Windows always go through WSL
+  # and also force unix style path
+  if ($IsWindows -and $Command -ne "wsl")
+  {
+    $Arguments = $Arguments ? "$Command $Arguments" : $Command
+    $AbsolutePathInArguments = $Arguments | Select-String ".*([a-zA-Z]{1}):\\.*" -AllMatches
+    $Arguments = $Arguments -replace "\\", "/"
+    $Command = "wsl"
+  }
+
   # Log the invoked command
   $FullCommand = "$Command$($Arguments ? (" $Arguments") : '')"
   Write-LogVerbose "Running command '$FullCommand'..."
@@ -44,16 +55,16 @@ function Invoke-TerminalCommand
   }
   $OutEvent = Register-ObjectEvent `
                 -Action {
-                  $Message = $Event.SourceEventArgs.Data | Resolve-TerminalCommandOutput
-                  $Message -and $event.MessageData.ShouldCapture ? $event.MessageData.LogStore.Add($Event.SourceEventArgs.Data) : [void]'noop'
+                  $Message = ($Event.SourceEventArgs.Data -replace "`0", "") | Resolve-TerminalCommandOutput
+                  $Message -and $event.MessageData.ShouldCapture ? $event.MessageData.LogStore.Add($Message) : [void]'noop'
                 }`
                 -InputObject $Process `
                 -EventName OutputDataReceived `
                 -MessageData $OutputCapture
   $ErrEvent = Register-ObjectEvent `
                 -Action {
-                  $Message = $Event.SourceEventArgs.Data | Resolve-TerminalCommandOutput -IsErrorOutput
-                  $Message -and $event.MessageData.ShouldCapture ? $event.MessageData.LogStore.Add($Event.SourceEventArgs.Data) : [void]'noop'
+                  $Message = ($Event.SourceEventArgs.Data -replace "`0", "") | Resolve-TerminalCommandOutput -IsErrorOutput
+                  $Message -and $event.MessageData.ShouldCapture ? $event.MessageData.LogStore.Add($Message) : [void]'noop'
                 } `
                 -InputObject $Process `
                 -EventName ErrorDataReceived `

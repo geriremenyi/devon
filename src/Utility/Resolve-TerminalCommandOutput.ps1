@@ -14,7 +14,7 @@ function Resolve-TerminalCommandOutput
   process 
   {
     # If empty just return
-    if (!$Message)
+    if (!($Message -replace "`0", ""))
     {
       return
     }
@@ -31,7 +31,7 @@ function Resolve-TerminalCommandOutput
     {
       "*error." { Write-LogError $Message; break }
       "*warning*" { Write-LogWarning $Message; break }
-      "*succeeded*" { Write-LogInformation $Message; break }
+      "*succe*" { Write-LogInformation $Message; break }
       default { Write-LogVerbose $Message }
     }
 

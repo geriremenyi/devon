@@ -6,6 +6,7 @@ function Install-Homebrew
       [switch]
       $InteractiveModeDisabled
   )
+  
   try 
   {
     # Check installed
@@ -37,29 +38,8 @@ function Install-Homebrew
     Invoke-WebRequest -Uri $BrewInstaller -OutFile $TempFilePath
     $ProgressPreference = $CurrentProgressPreference
 
-    # On Windows WSL 2 has to be enabled
-    if ($IsWindows)
-    {
-      try 
-      {
-        $WslVersion = Invoke-Command "wsl -l -v" # TODO test this on Windows and check for v2
-        if (!$WslVersion)
-        {
-          $ErrorMessage = 
-            "WSL is not enabled. Homebrew installation cannot proceed."
-            "Please check the documentation to enable WSL: https://docs.microsoft.com/en-us/windows/wsl/install"
-          Write-Error $ErrorMessage
-          throw $ErrorMessage
-        }
-      }
-      catch 
-      {
-        Write-LogError
-          "The command 'wsl -l -v' failed."
-          "Please check that you are on at least the Windows version which supports this command: https://docs.microsoft.com/en-us/windows/wsl/install#prerequisites"
-        throw $_
-      }
-    }
+    # Windows and WSL specific part
+    Test-WindowsLinuxSubsystem
 
     # Run installation
     Invoke-TerminalCommand -Command "chmod" -Arguments "+x $TempFilePath"

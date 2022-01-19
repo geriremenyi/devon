@@ -1,3 +1,10 @@
+[CmdletBinding()]
+param (
+    [Parameter(HelpMessage = "Specify the linux subsystem to work on if host OS is Windows")]
+    [string]
+    $UnixDistributionIfWindows = "Ubuntu"
+)
+
 # Initialize global variables
 $Global:ProductivityScriptsSettings = [PSCustomObject]@{
   LogLevel = 'Verbose'
@@ -24,9 +31,12 @@ if (($ScriptFiles.Length - 1) -ne 0)
 # Load scripts and show progress
 foreach ($File in $ScriptFiles)
 {
-  . $file.FullName
+  . $File.FullName
   Export-ModuleMember -Function $File.BaseName -ErrorAction 'Stop'
   $Percentage += $PercentageAddition
   Write-Progress -Activity "Loading productivity scripts" -PercentComplete $Percentage
 }
 Write-Progress -Activity "Loading productivity scripts" -Status 'Ready' -Completed
+
+# Initialize environment
+Initialize-WindowsEnvironment -UnixDistributionIfWindows $UnixDistributionIfWindows
