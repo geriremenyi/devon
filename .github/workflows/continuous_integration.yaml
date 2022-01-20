@@ -23,6 +23,10 @@ jobs:
           Set-PSRepository PSGallery -InstallationPolicy Trusted
           Install-Module Pester -Force -ErrorAction Stop
 
+      - name: Import Pester module
+        shell: pwsh
+        run: Import-Module Pester -PassThru
+
       - name: Run unit tests
         shell: pwsh
         run: ./tests/unit/Invoke-UnitTests.ps1
