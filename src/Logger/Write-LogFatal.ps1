@@ -1,4 +1,4 @@
-function Write-LogError
+function Write-LogFatal
 {
   [CmdletBinding()]
   param(
@@ -11,7 +11,7 @@ function Write-LogError
 
   process
   {
-    Write-Log -Level ([LogLevel]::Error) -Message $Message
+    Write-Log -Level ([LogLevel]::Fatal) -Message $Message
   }
   
   end {}

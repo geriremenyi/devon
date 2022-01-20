@@ -1,4 +1,4 @@
-function Write-LogError
+function Write-LogTrace
 {
   [CmdletBinding()]
   param(
@@ -11,8 +11,9 @@ function Write-LogError
 
   process
   {
-    Write-Log -Level ([LogLevel]::Error) -Message $Message
+    Write-Log -Level ([LogLevel]::Trace) -Message $Message
   }
   
   end {}
+  
 }

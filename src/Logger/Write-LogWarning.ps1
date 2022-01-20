@@ -11,7 +11,7 @@ function Write-LogWarning
 
   process
   {
-    Write-Log -Level "Warning" -Message $Message
+    Write-Log -Level ([LogLevel]::Warning) -Message $Message
   }
   
   end {}

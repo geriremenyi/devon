@@ -1,0 +1,28 @@
+name: Continuous integration
+on:
+  pull_request
+jobs:
+  test:
+    name: Test PowerShell scripts
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+      
+      - name: Setup PowerShell module cache
+        id: ps_module_cache
+        uses: actions/cache@v2
+        with:
+          path: "~/.local/share/powershell/Modules"
+          key: ${{ runner.os }}-PsModuleCache
+    
+      - name: Install required PowerShell modules
+        if: steps.ps_module_cache.outputs.cache-hit != 'true'
+        shell: pwsh
+        run: |
+          Set-PSRepository PSGallery -InstallationPolicy Trusted
+          Install-Module Pester -Force -ErrorAction Stop
+
+      - name: Run unit tests
+        shell: pwsh
+        run: ./tests/unit/Invoke-UnitTests.ps1

@@ -1,32 +1,31 @@
 # Initialize global variables
 $Global:ProductivityScriptsSettings = [PSCustomObject]@{
-  LogLevel = 'Verbose'
-  LogToConsole = $true
-  LogToFileDirectory = $null
+  LoggerLevel           = [LogLevel]::Trace
+  LoggerDirectory       = $null
+  LoggerNewFileTimeout  = 5
 }
-$ErrorActionPreference = 'Stop'
+$Global:ProductivityScriptsLogStore = [System.Collections.ArrayList]::Synchronized((New-Object System.Collections.ArrayList))
 
-# Collect script files 
-$ScriptFiles = Get-ChildItem $PSScriptRoot -Recurse -Filter '*.ps1'
-if ($ScriptFiles.Length -eq 0)
+# Collect and load script files 
+$ScriptFiles = Get-ChildItem $PSScriptRoot -Recurse -Filter '*.ps1' -Exclude "*.Tests.ps1"
+if ($ScriptFiles.Length -gt 0)
 {
-  return
+  $Percentage = 0
+  $PercentageAddition = 100
+  if (($ScriptFiles.Length - 1) -gt 0)
+  {
+    $PercentageAddition = $PercentageAddition / $ScriptFiles.Length - 1
+  }
+
+  # Load scripts and show progress
+  foreach ($ScriptFile in $ScriptFiles)
+  {
+    . $ScriptFile.FullName
+    Export-ModuleMember -Function $ScriptFile.BaseName -ErrorAction "Stop"
+    $Percentage += $PercentageAddition
+    Write-Progress -Activity "Loading productivity scripts" -PercentComplete $Percentage
+  }
+  Write-Progress -Activity "Loading productivity scripts" -Status "Ready" -Completed
 }
 
-# Calculate progress indicator steps
-$Percentage = 0
-$PercentageAddition = 100
-if (($ScriptFiles.Length - 1) -ne 0)
-{
-  $PercentageAddition = $PercentageAddition / $ScriptFiles.Length - 1
-}
-
-# Load scripts and show progress
-foreach ($File in $ScriptFiles)
-{
-  . $file.FullName
-  Export-ModuleMember -Function $File.BaseName -ErrorAction 'Stop'
-  $Percentage += $PercentageAddition
-  Write-Progress -Activity "Loading productivity scripts" -PercentComplete $Percentage
-}
-Write-Progress -Activity "Loading productivity scripts" -Status 'Ready' -Completed
+# Run module initialization scripts
