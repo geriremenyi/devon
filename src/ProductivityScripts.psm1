@@ -2,7 +2,6 @@
 $Global:ProductivityScriptsSettings = [PSCustomObject]@{
   LoggerLevel           = [LogLevel]::Trace
   LoggerDirectory       = $null
-  LoggerNewFileTimeout  = 5
 }
 $Global:ProductivityScriptsLogStore = [System.Collections.ArrayList]::Synchronized((New-Object System.Collections.ArrayList))
 

@@ -1,6 +1,6 @@
 BeforeAll {
   # Backup global variables
-  $Global:ProductivityScriptsSettingsBackup = $Global:ProductivityScriptsSettings.PsObject.Copy()
+  $Global:ProductivityScriptsSettingsBackup = $Global:ProductivityScriptsSettings?.PsObject?.Copy()
   
   # Dependendencies
   . $PSScriptRoot/Get-LogColor.ps1
@@ -169,6 +169,6 @@ Describe "Write-Log" {
 
 AfterAll {
   # Restore global variables
-  $Global:ProductivityScriptsSettings = $Global:ProductivityScriptsSettingsBackup.PsObject.Copy()
+  $Global:ProductivityScriptsSettings = $Global:ProductivityScriptsSettingsBackup?.PsObject?.Copy()
   $Global:ProductivityScriptsSettingsBackup = $null
 }
