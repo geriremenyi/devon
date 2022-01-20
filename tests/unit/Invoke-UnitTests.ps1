@@ -1,3 +1,6 @@
+# Import Pester
+Import-Module Pester -PassThru
+
 # Import types
 Import-Module (Join-Path $PSScriptRoot ".." ".." "src" "Logger" "LogLevel.ps1" -Resolve) -Force
 

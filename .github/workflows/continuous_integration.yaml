@@ -25,6 +25,4 @@ jobs:
 
       - name: Run unit tests
         shell: pwsh
-        run: |
-          Import-Module Pester -PassThru
-          ./tests/unit/Invoke-UnitTests.ps1
+        run: ./tests/unit/Invoke-UnitTests.ps1
