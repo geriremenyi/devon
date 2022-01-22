@@ -1,9 +1,9 @@
 BeforeAll {
   # Dependendencies
-  . $PSScriptRoot/../Logger/Write-LogTrace.ps1
-  . $PSScriptRoot/../Logger/Write-LogInfo.ps1
-  . $PSScriptRoot/../Logger/Write-LogWarning.ps1
-  . $PSScriptRoot/../Logger/Write-LogError.ps1
+  . $PSScriptRoot/../../../src/Logger/Write-LogTrace.ps1
+  . $PSScriptRoot/../../../src/Logger/Write-LogInfo.ps1
+  . $PSScriptRoot/../../../src/Logger/Write-LogWarning.ps1
+  . $PSScriptRoot/../../../src/Logger/Write-LogError.ps1
 
   # Mock dependencies
   Mock Write-LogTrace -Verifiable
@@ -12,10 +12,10 @@ BeforeAll {
   Mock Write-LogError -Verifiable
 
   # Script under test
-  . $PSScriptRoot/Resolve-TerminalCommandOutput.ps1
+  . $PSScriptRoot/../../../src/Utility/Resolve-TerminalCommandOutput.ps1
 }
 
-Describe "Resolve-TerminalCommandOutput" {
+Describe "Resolve-TerminalCommandOutput" -Tag "Unit" {
   Context "doesn't write to logs" {
     It "when message is not passed" {
       # Arrange

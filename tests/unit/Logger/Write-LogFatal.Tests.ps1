@@ -1,15 +1,15 @@
 BeforeAll {
   # Dependendencies
-  . $PSScriptRoot/Write-Log.ps1
+  . $PSScriptRoot/../../../src/Logger/Write-Log.ps1
 
   # Mock dependencies
   Mock Write-Log -Verifiable
 
   # Script under test
-  . $PSScriptRoot/Write-LogFatal.ps1
+  . $PSScriptRoot/../../../src/Logger/Write-LogFatal.ps1
 }
 
-Describe "Write-LogFatal" {
+Describe "Write-LogFatal" -Tag "Unit" {
   It "writes logs with level 'Fatal' when called" {
     # Arrange
     $MessageToWrite = "This is a test message"

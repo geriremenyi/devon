@@ -1,13 +1,9 @@
 BeforeAll {
-  # Dependendencies
-
-  # Mock dependencies
-
   # Script under test
-  . $PSScriptRoot/Get-LogColor.ps1
+  . $PSScriptRoot/../../../src/Logger/Get-LogColor.ps1
 }
 
-Describe "Get-LogColor" {
+Describe "Get-LogColor" -Tag "Unit" {
   It "throws when invalid level is passed" {
     # Arrange
     $Level = "This is a made up log level"

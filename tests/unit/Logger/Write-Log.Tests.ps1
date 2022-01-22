@@ -3,7 +3,7 @@ BeforeAll {
   $Global:ProductivityScriptsSettingsBackup = $Global:ProductivityScriptsSettings?.PsObject?.Copy()
   
   # Dependendencies
-  . $PSScriptRoot/Get-LogColor.ps1
+  . $PSScriptRoot/../../../src/Logger/Get-LogColor.ps1
 
   # Mock dependencies
   Mock Get-Date -Verifiable -ParameterFilter { $Format -eq 'yyyy-MM-dd HH:mm:ss.ff' }
@@ -15,10 +15,10 @@ BeforeAll {
   Mock Add-Content -Verifiable
 
   # Script under test
-  . $PSScriptRoot/Write-Log.ps1
+  . $PSScriptRoot/../../../src/Logger/Write-Log.ps1
 }
 
-Describe "Write-Log" {
+Describe "Write-Log" -Tag "Unit" {
   It "should skip logging if level set is lower severity than message" {
     # Arrange
     $Global:ProductivityScriptsSettings.LoggerLevel = ([LogLevel]::Error)
