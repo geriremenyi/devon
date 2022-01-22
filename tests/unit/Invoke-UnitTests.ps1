@@ -17,20 +17,28 @@ $Global:ProductivityScriptsSettings = [PSCustomObject]@{
 # Collect data for Pester config
 $UnitTestsFolders = (Get-ChildItem (Resolve-Path $PSScriptRoot) -Directory).FullName
 $SourceFolders =  (Get-ChildItem (Join-Path $PSScriptRoot ".." ".." "src" -Resolve) -Directory).FullName
-$TargetPercentage = 100
+$TargetCoveragePercentage = 100
 
 # Set Pester config
 $PesterConfig = [PesterConfiguration]::Default
 $PesterConfig.Run.Path = $UnitTestsFolders
 $PesterConfig.Run.Throw = $true
-#$PesterConfig.Run.PassThru = $true
+$PesterConfig.Run.PassThru = $true
 $PesterConfig.CodeCoverage.Enabled = $true
 $PesterConfig.CodeCoverage.Path = $SourceFolders
-$PesterConfig.CodeCoverage.CoveragePercentTarget = $TargetPercentage
+$PesterConfig.CodeCoverage.CoveragePercentTarget = $TargetCoveragePercentage
 $PesterConfig.CodeCoverage.OutputPath = Join-Path $PSScriptRoot ".." ".." "out" "unit" "coverage.xml"
 $PesterConfig.TestResult.Enabled = $true
 $PesterConfig.TestResult.OutputPath = Join-Path $PSScriptRoot ".." ".." "out" "unit" "results.xml"
 $PesterConfig.TestResult.TestSuiteName = "Unit Tests"
 
 # Run pester
-Invoke-Pester -Configuration $PesterConfig
+$PesterResults = Invoke-Pester -Configuration $PesterConfig
+
+# Throw on low coverage
+if ($PesterResults.CodeCoverage.CoveragePercent -lt $TargetCoveragePercentage)
+{
+  throw `
+    "The target coverage $($TargetCoveragePercentage.ToString("#.##"))% wasn't reached. " `
+    + "Unit tests only cover $($PesterResults.CodeCoverage.CoveragePercent.ToString("#.##"))% of the source code."
+}
