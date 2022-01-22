@@ -25,4 +25,4 @@ jobs:
 
       - name: Run unit tests with coverage
         shell: pwsh
-        run: ./tests/unit/Invoke-UnitTests.ps1
+        run: ./tests/Invoke-UnitTests.ps1
