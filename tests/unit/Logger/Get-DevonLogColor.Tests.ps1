@@ -1,24 +1,24 @@
 BeforeAll {
   # Script under test
-  . $PSScriptRoot/../../../src/Logger/Get-LogColor.ps1
+  . $PSScriptRoot/../../../src/Logger/Get-DevonLogColor.ps1
 }
 
-Describe "Get-LogColor" -Tag "Unit" {
+Describe "Get-DevonLogColor" -Tag "Unit" {
   It "throws when invalid level is passed" {
     # Arrange
     $Level = "This is a made up log level"
     
     # Act
     # Assert
-    { Get-LogColor $Level } | Should -Throw
+    { Get-DevonLogColor $Level } | Should -Throw
   }
 
   It "returns 'Cyan' when 'Trace' level used" {
     # Arrange
-    $Level = [LogLevel]::Trace
+    $Level = [DevonLogLevel]::Trace
     
     # Act
-    $LogColor = Get-LogColor $Level
+    $LogColor = Get-DevonLogColor $Level
 
     # Assert
     $LogColor | Should -Be "Cyan"
@@ -26,10 +26,10 @@ Describe "Get-LogColor" -Tag "Unit" {
 
   It "returns 'Yellow' when 'Debug' level used" {
     # Arrange
-    $Level = [LogLevel]::Debug
+    $Level = [DevonLogLevel]::Debug
     
     # Act
-    $LogColor = Get-LogColor $Level
+    $LogColor = Get-DevonLogColor $Level
 
     # Assert
     $LogColor | Should -Be "Yellow"
@@ -37,10 +37,10 @@ Describe "Get-LogColor" -Tag "Unit" {
 
   It "returns 'White' when 'Info' level used" {
     # Arrange
-    $Level = [LogLevel]::Info
+    $Level = [DevonLogLevel]::Info
     
     # Act
-    $LogColor = Get-LogColor $Level
+    $LogColor = Get-DevonLogColor $Level
 
     # Assert
     $LogColor | Should -Be "White"
@@ -48,10 +48,10 @@ Describe "Get-LogColor" -Tag "Unit" {
 
   It "returns 'DarkYellow' when 'Warning' level used" {
     # Arrange
-    $Level = [LogLevel]::Warning
+    $Level = [DevonLogLevel]::Warning
     
     # Act
-    $LogColor = Get-LogColor $Level
+    $LogColor = Get-DevonLogColor $Level
 
     # Assert
     $LogColor | Should -Be "DarkYellow"
@@ -59,10 +59,10 @@ Describe "Get-LogColor" -Tag "Unit" {
 
   It "returns 'Red' when 'Error' level used" {
     # Arrange
-    $Level = [LogLevel]::Error
+    $Level = [DevonLogLevel]::Error
     
     # Act
-    $LogColor = Get-LogColor $Level
+    $LogColor = Get-DevonLogColor $Level
 
     # Assert
     $LogColor | Should -Be "Red"
@@ -70,10 +70,10 @@ Describe "Get-LogColor" -Tag "Unit" {
 
   It "returns 'DarkRed' when 'Fatal' level used" {
     # Arrange
-    $Level = [LogLevel]::Fatal
+    $Level = [DevonLogLevel]::Fatal
     
     # Act
-    $LogColor = Get-LogColor $Level
+    $LogColor = Get-DevonLogColor $Level
 
     # Assert
     $LogColor | Should -Be "DarkRed"
@@ -81,10 +81,10 @@ Describe "Get-LogColor" -Tag "Unit" {
 
   It "returns 'White' when 'Off' level used" {
     # Arrange
-    $Level = [LogLevel]::Off
+    $Level = [DevonLogLevel]::Off
     
     # Act
-    $LogColor = Get-LogColor $Level
+    $LogColor = Get-DevonLogColor $Level
 
     # Assert
     $LogColor | Should -Be "White"

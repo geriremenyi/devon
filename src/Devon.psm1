@@ -1,9 +1,9 @@
 # Initialize global variables
-$Global:ProductivityScriptsSettings = [PSCustomObject]@{
-  LoggerLevel           = [LogLevel]::Trace
+$Global:DevonSettings = [PSCustomObject]@{
+  LoggerLevel           = [DevonLogLevel]::Trace
   LoggerDirectory       = $null
 }
-$Global:ProductivityScriptsLogStore = [System.Collections.ArrayList]::Synchronized((New-Object System.Collections.ArrayList))
+$Global:DevonLogStore = [System.Collections.ArrayList]::Synchronized((New-Object System.Collections.ArrayList))
 
 # Collect and load script files 
 $ScriptFiles = Get-ChildItem $PSScriptRoot -Recurse -Filter '*.ps1' -Exclude "*.Tests.ps1"

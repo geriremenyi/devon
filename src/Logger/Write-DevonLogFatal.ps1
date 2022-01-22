@@ -1,4 +1,4 @@
-function Write-LogFatal
+function Write-DevonLogFatal
 {
   [CmdletBinding()]
   param(
@@ -11,7 +11,7 @@ function Write-LogFatal
 
   process
   {
-    Write-Log -Level ([LogLevel]::Fatal) -Message $Message
+    Write-DevonLog -Level ([DevonLogLevel]::Fatal) -Message $Message
   }
   
   end {}

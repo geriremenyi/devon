@@ -1,4 +1,4 @@
-enum LogLevel {
+enum DevonLogLevel {
   Off = 0
   Fatal = 100
   Error = 200

@@ -1,27 +1,39 @@
 # Make sure Pester is installed and imported
-. $PSScriptRoot/../Install-Pester.ps1
+$ModuleName = "Pester"
+if (!(Get-Module | Where-Object {$_.Name -eq $ModuleName})) 
+{
+  if (Get-Module -ListAvailable | Where-Object {$_.Name -eq $m})
+  {
+    Import-Module Pester -PassThru
+  }
+  else 
+  {
+    Install-Module Pester -Force -ErrorAction "Stop"
+    Import-Module Pester -PassThru
+  }
+}
 
 # Import types
-$TypesDefined = Get-ChildItem (Join-Path $PSScriptRoot ".." ".." "src" -Resolve) -Recurse -Include "*.ps1" -Exclude "*-*.ps1", "*.Tests.ps1"
-foreach ($Type in $TypesDefined)
+$TypesPaths = Get-ChildItem (Join-Path $PSScriptRoot ".." "src" -Resolve) -Recurse -Include "*.ps1" -Exclude "*-*.ps1", "*.Tests.ps1"
+foreach ($TypePath in $TypesPaths)
 {
-  Import-Module $Type.FullName -Force
+  Write-Host $TypePath
+  Import-Module $TypePath.FullName -Force
 }
 
 # Set default global variables
-$Global:ProductivityScriptsSettings = [PSCustomObject]@{
-  LoggerLevel           = [LogLevel]::Trace
+$Global:DevonSettings = [PSCustomObject]@{
+  LoggerLevel           = [DevonLogLevel]::Trace
   LoggerDirectory       = $null
 }
 
 # Collect data for Pester config
-$UnitTestsFolders = (Get-ChildItem (Resolve-Path $PSScriptRoot) -Directory).FullName
-$SourceFolders =  (Get-ChildItem (Join-Path $PSScriptRoot ".." ".." "src" -Resolve) -Directory).FullName
+$SourceFolders = (Get-ChildItem (Join-Path $PSScriptRoot ".." "src" -Resolve) -Directory).FullName
 $TargetCoveragePercentage = 100
 
 # Set Pester config
 $PesterConfig = [PesterConfiguration]::Default
-$PesterConfig.Run.Path = $UnitTestsFolders
+$PesterConfig.Run.Path = (Join-path $PSScriptRoot "unit" -Resolve)
 $PesterConfig.Run.Throw = $true
 $PesterConfig.Run.PassThru = $true
 $PesterConfig.CodeCoverage.Enabled = $true
@@ -39,6 +51,6 @@ $PesterResults = Invoke-Pester -Configuration $PesterConfig
 if ($PesterResults.CodeCoverage.CoveragePercent -lt $TargetCoveragePercentage)
 {
   throw `
-    "The target coverage $($TargetCoveragePercentage.ToString("#.##"))% wasn't reached. " `
+    "The target unit test coverage $($TargetCoveragePercentage.ToString("#.##"))% wasn't reached. " `
     + "Unit tests only cover $($PesterResults.CodeCoverage.CoveragePercent.ToString("#.##"))% of the source code."
 }

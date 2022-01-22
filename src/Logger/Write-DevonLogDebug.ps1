@@ -1,4 +1,4 @@
-function Write-LogDebug
+function Write-DevonLogDebug
 {
   [CmdletBinding()]
   param(
@@ -11,7 +11,7 @@ function Write-LogDebug
 
   process
   {
-    Write-Log -Level ([LogLevel]::Debug) -Message $Message
+    Write-DevonLog -Level ([DevonLogLevel]::Debug) -Message $Message
   }
   
   end {}
