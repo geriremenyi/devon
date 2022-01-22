@@ -1,4 +1,4 @@
-function Write-LogWarning
+function Write-DevonLogTrace
 {
   [CmdletBinding()]
   param(
@@ -11,8 +11,9 @@ function Write-LogWarning
 
   process
   {
-    Write-Log -Level "Warning" -Message $Message
+    Write-DevonLog -Level ([DevonLogLevel]::Trace) -Message $Message
   }
   
   end {}
+  
 }

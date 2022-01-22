@@ -1,7 +1,7 @@
-function Resolve-TerminalCommandOutput
+function Resolve-DevonTerminalCommandOutput
 {
   param (
-      [Parameter(Mandatory = $true, ValueFromPipeline = $true, HelpMessage = "Output message to resolve")]
+      [Parameter(ValueFromPipeline = $true, HelpMessage = "Output message to resolve")]
       $Message,
 
       [Parameter(HelpMessage = "Is the source error output")]
@@ -14,7 +14,7 @@ function Resolve-TerminalCommandOutput
   process 
   {
     # If empty just return
-    if (!$Message)
+    if (!($Message -replace "`0", ""))
     {
       return
     }
@@ -22,17 +22,17 @@ function Resolve-TerminalCommandOutput
     # If coming from error output
     if ($IsErrorOutput.IsPresent -and !($Message -match "warning"))
     {
-      return Write-LogError $Message
+      Write-DevonLogError $Message
       return $Message
     }
 
     # Handle with different message resolvers
     switch -Wildcard ($Message) 
     {
-      "*error." { Write-LogError $Message; break }
-      "*warning*" { Write-LogWarning $Message; break }
-      "*succeeded*" { Write-LogInformation $Message; break }
-      default { Write-LogVerbose $Message }
+      "*error*" { Write-DevonLogError $Message; break }
+      "*warning*" { Write-DevonLogWarning $Message; break }
+      "*succe*" { Write-DevonLogInfo $Message; break }
+      default { Write-DevonLogTrace $Message }
     }
 
     # Return with the message
