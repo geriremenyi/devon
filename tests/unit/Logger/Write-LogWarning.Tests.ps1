@@ -11,14 +11,13 @@ BeforeAll {
 
 Describe "Write-LogWarning" -Tag "Unit" {
   It "writes logs with level 'Warning' when called" {
-    # # Arrange
-    # $MessageToWrite = "This is a test message"
+    # Arrange
+    $MessageToWrite = "This is a test message"
     
-    # # Act
-    # Write-LogWarning $MessageToWrite
+    # Act
+    Write-LogWarning $MessageToWrite
 
-    # # Assert
-    # Should -Invoke -CommandName Write-Log -Times 1 -ParameterFilter { $Level -eq ([LogLevel]::Warning) -and $Message -eq $MessageToWrite }
-    
+    # Assert
+    Should -Invoke -CommandName Write-Log -Times 1 -ParameterFilter { $Level -eq ([LogLevel]::Warning) -and $Message -eq $MessageToWrite }
   }
 }
